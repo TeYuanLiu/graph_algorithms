@@ -79,17 +79,51 @@ def preprocess():
         w_list.append(v)
     plt.hist(w_list, bins="auto")
     plt.title("Histogram")
+    plt.xlabel("Edge weight")
+    plt.ylabel("Count")
     plt.show()
     print(file_count)
     print(valid_count)
     print(len(p_dic))
     print("preprocessing completed...")
 
+def paint():
+    path = "./finance_data/"
+    df = pd.read_csv(path + "Name_sector.csv", header=0)
+    n_list = df["Symbol"].tolist()
+    s_list = df["Sector"].tolist()
+    if len(n_list) != len(s_list):
+        print("list length equality error...")
+        return
+    s_n_dic = {}
+    c_list = []
+    for i in range(len(n_list)):
+        s = s_list[i]
+        n = n_list[i]
+        if s_n_dic.get(s) == None:
+            tmp_list = []
+            tmp_list.append(n)
+            s_n_dic[s] = tmp_list
+        else:
+            s_n_dic[s].append(n)    
+    print(len(s_n_dic))
+    n_s_dic = {}
+    s_count = 0
+    for s, nl in s_n_dic.items():
+        for n in nl:
+            n_s_dic[n] = s_count
+        s_count += 1
+    print(s_count)
+    with open("stock_color_mapping.txt", "w") as outfile:
+        for k, v in n_s_dic.items():
+            line = ",".join([k, str(v)]) + "\n"
+            outfile.write(line)
 #######################
 # Main Function
 #######################
 def main():
-    preprocess()
+    #preprocess()
+    paint()
 
 if __name__ == "__main__":
     main()
