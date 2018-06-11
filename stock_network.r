@@ -27,6 +27,8 @@ plot_dd = function(g){
 main = function(){
     dt = fread("stock_network_edgelist.txt", header=F, sep=",", fill=T)
     g = graph.data.frame(dt, directed=F)
-    plot_dd(g)
+    #plot_dd(g)
+    g_mst = mst(g)
+    plot(g_mst)
 }
 main()
